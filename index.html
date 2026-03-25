@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#000000">
+<link rel="manifest" href="/manifest.json">
+<link rel="apple-touch-icon" href="/icon-192.png">
+<title>Deal Race — Mainstay Digital</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Inter', -apple-system, sans-serif;
+  background: #000;
+  color: #e2e8f0;
+  min-height: 100vh;
+  padding: 24px 16px;
+  padding-top: env(safe-area-inset-top, 24px);
+}
+.container { max-width: 600px; margin: 0 auto; }
+.header { text-align: center; margin-bottom: 28px; }
+.header h1 { font-size: 28px; font-weight: 900; color: #fff; letter-spacing: -1.5px; }
+.header h1 span { color: #D4A853; }
+.header .sub { font-size: 13px; color: #64748b; margin-top: 2px; }
+.prize-badge {
+  display: inline-block; margin-top: 10px;
+  background: rgba(212,168,83,0.08); border: 1px solid rgba(212,168,83,0.2);
+  border-radius: 8px; padding: 6px 16px; font-size: 13px; font-weight: 600; color: #D4A853;
+}
+.leader-banner {
+  background: rgba(212,168,83,0.06); border: 1px solid rgba(212,168,83,0.15);
+  border-radius: 12px; padding: 14px; text-align: center; margin-bottom: 20px;
+}
+.leader-banner .label { font-size: 11px; color: #D4A853; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; }
+.leader-banner .name { font-size: 18px; color: #fff; font-weight: 800; margin-top: 4px; }
+.log-deal {
+  background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px; padding: 20px; margin-bottom: 20px;
+}
+.log-deal h3 { font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 14px; }
+.form-row { display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
+.form-group { flex: 1; min-width: 120px; }
+.form-group label {
+  display: block; font-size: 10px; font-weight: 600; color: #64748b;
+  text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;
+}
+.form-group select, .form-group input {
+  width: 100%; padding: 10px 12px;
+  background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px; color: #e2e8f0; font-family: 'Inter', sans-serif; font-size: 14px;
+}
+.form-group select { appearance: none; cursor: pointer; }
+.form-group select:focus, .form-group input:focus { outline: none; border-color: #3b82f6; }
+select option { background: #111; color: #e2e8f0; }
+.deal-preview {
+  background: rgba(59,130,246,0.06); border: 1px solid rgba(59,130,246,0.12);
+  border-radius: 8px; padding: 10px 14px; display: flex; justify-content: space-between;
+  margin-bottom: 12px; font-size: 13px;
+}
+.dp-label { color: #64748b; } .dp-value { color: #fff; font-weight: 600; } .dp-value.green { color: #22c55e; }
+.btn-log {
+  width: 100%; padding: 12px; background: linear-gradient(135deg, #3b82f6, #2563eb);
+  border: none; border-radius: 8px; color: #fff; font-family: 'Inter', sans-serif;
+  font-size: 15px; font-weight: 700; cursor: pointer;
+}
+.btn-log:active { transform: scale(0.98); }
+.team-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+.ts-card {
+  background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 10px; padding: 14px; text-align: center;
+}
+.ts-val { font-size: 22px; font-weight: 800; color: #3b82f6; line-height: 1; margin-bottom: 3px; }
+.ts-val.green { color: #22c55e; } .ts-val.gold { color: #D4A853; }
+.ts-label { font-size: 10px; color: #64748b; text-transform: uppercase; letter-spacing: 1px; }
+.streaks { display: flex; gap: 10px; margin-bottom: 20px; }
+.streak-card {
+  flex: 1; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 10px; padding: 12px; text-align: center;
+}
+.streak-card.hot { border-color: rgba(239,130,50,0.3); background: rgba(239,130,50,0.04); }
+.streak-name { font-size: 12px; font-weight: 600; color: #94a3b8; margin-bottom: 4px; }
+.streak-fires { font-size: 18px; letter-spacing: 2px; margin-bottom: 3px; }
+.streak-label { font-size: 10px; color: #64748b; }
+.players { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
+.player {
+  background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 14px; padding: 16px 18px; display: flex; align-items: center; gap: 14px;
+  position: relative;
+}
+.player.first { border-color: rgba(212,168,83,0.25); background: rgba(212,168,83,0.03); }
+.rank { font-size: 28px; font-weight: 900; width: 36px; text-align: center; color: #1e293b; }
+.player.first .rank { color: #D4A853; } .player.second .rank { color: #94a3b8; } .player.third .rank { color: #78716c; }
+.p-info { flex: 1; }
+.p-name { font-size: 17px; font-weight: 700; color: #fff; }
+.p-role { font-size: 11px; color: #64748b; }
+.p-stats { text-align: right; }
+.p-deals { font-size: 32px; font-weight: 900; line-height: 1; }
+.player.first .p-deals { color: #D4A853; } .player.second .p-deals, .player.third .p-deals { color: #3b82f6; }
+.p-deals-label { font-size: 10px; color: #64748b; text-transform: uppercase; letter-spacing: 1px; }
+.p-commission { font-size: 12px; font-weight: 600; color: #22c55e; margin-top: 3px; }
+.p-bar { position: absolute; bottom: 0; left: 0; right: 0; height: 3px; background: rgba(255,255,255,0.02); border-radius: 0 0 14px 14px; overflow: hidden; }
+.p-bar-fill { height: 100%; }
+.player.first .p-bar-fill { background: #D4A853; } .player.second .p-bar-fill, .player.third .p-bar-fill { background: #3b82f6; }
+.crown { position: absolute; top: 6px; right: 10px; font-size: 16px; }
+.history { margin-bottom: 24px; }
+.history h3 { font-size: 13px; font-weight: 700; color: #fff; margin-bottom: 10px; }
+.deal-entry {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 12px;
+  flex-wrap: wrap; gap: 4px;
+}
+.de-left { display: flex; align-items: center; gap: 8px; }
+.de-who { font-weight: 600; color: #e2e8f0; } .de-type { color: #64748b; }
+.de-right { display: flex; align-items: center; gap: 6px; }
+.de-revenue { color: #fff; font-weight: 600; }
+.de-commission { color: #22c55e; font-size: 11px; }
+.de-date { color: #475569; font-size: 10px; }
+.btn-delete {
+  background: none; border: none; color: #475569; font-size: 13px;
+  cursor: pointer; padding: 2px 6px; border-radius: 4px;
+}
+.btn-delete:hover { color: #ef4444; background: rgba(239,68,68,0.1); }
+.btn-clear {
+  margin-top: 10px; padding: 8px 14px;
+  background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2);
+  border-radius: 6px; color: #ef4444; font-size: 11px; font-weight: 600;
+  cursor: pointer; font-family: 'Inter', sans-serif;
+}
+.no-deals { color: #334155; font-size: 13px; text-align: center; padding: 16px; }
+.confetti-container { position: fixed; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none; z-index: 9999; overflow: hidden; }
+.confetti-piece { position: absolute; top: -20px; border-radius: 2px; animation: confetti-fall 2.5s ease-out forwards; }
+@keyframes confetti-fall { 0% { transform: translateY(0) rotate(0deg); opacity: 1; } 100% { transform: translateY(110vh) rotate(720deg); opacity: 0; } }
+.loading { text-align: center; padding: 40px; color: #475569; }
+.footer { font-size: 10px; color: #1e293b; text-align: center; margin-top: 16px; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>MAINSTAY <span>DEAL RACE</span></h1>
+    <div class="sub">Florida Edition</div>
+    <div class="prize-badge">🏠 Winner Gets the Master Bedroom</div>
+  </div>
+  <div class="leader-banner">
+    <div class="label">Master Bedroom Leader</div>
+    <div class="name" id="leader-name">Loading...</div>
+  </div>
+  <div class="log-deal">
+    <h3>🔥 Log a Deal</h3>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Who Closed It</label>
+        <select id="who">
+          <option value="Caden">Caden</option>
+          <option value="Gavin">Gavin</option>
+          <option value="Dee">Dee</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Deal Type</label>
+        <select id="deal-type" onchange="updatePreview()">
+          <option value="website">Website — $1,500</option>
+          <option value="ai">AI Employee — $3,500</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group" style="flex:1;">
+        <label>Client Name</label>
+        <input type="text" id="client-name-input" placeholder="e.g. Kurt Wicks — Wicks Insurance" />
+      </div>
+    </div>
+    <div class="deal-preview">
+      <div><span class="dp-label">Revenue: </span><span class="dp-value" id="prev-revenue">$1,500</span></div>
+      <div><span class="dp-label">Commission: </span><span class="dp-value green" id="prev-commission">$400</span></div>
+    </div>
+    <button class="btn-log" onclick="logDeal()">LOG DEAL 🎯</button>
+  </div>
+  <div class="team-stats">
+    <div class="ts-card"><div class="ts-val" id="ts-deals">0</div><div class="ts-label">Total Deals</div></div>
+    <div class="ts-card"><div class="ts-val green" id="ts-revenue">$0</div><div class="ts-label">Setup Revenue</div></div>
+    <div class="ts-card"><div class="ts-val" id="ts-mrr" style="color:#3b82f6">$0/mo</div><div class="ts-label">Monthly Revenue</div></div>
+    <div class="ts-card"><div class="ts-val gold" id="ts-commission">$0</div><div class="ts-label">Commission</div></div>
+  </div>
+  <div class="streaks" id="streaks"></div>
+  <div class="players" id="leaderboard"></div>
+  <div class="confetti-container" id="confetti"></div>
+  <div class="history">
+    <h3>Recent Deals</h3>
+    <div id="deal-history"><div class="loading">Loading deals...</div></div>
+    <button class="btn-clear" onclick="clearAll()">Reset All Data</button>
+  </div>
+  <div class="footer">Mainstay Digital © 2026</div>
+</div>
+
+<script>
+const SUPABASE_URL = 'https://slmdfgunkmvbqbzjfpdz.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNsbWRmZ3Vua212YnFiempmcGR6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzExMDYwNDUsImV4cCI6MjA4NjY4MjA0NX0.kDpUakMhT3-Cq8L0R_JO-3ptNRVIHrEwBKGYKpEL1vk';
+
+const PRICING = {
+  website: { revenue: 1500, commission: 400, label: 'Website', points: 0.5 },
+  ai: { revenue: 3500, commission: 1000, label: 'AI Employee', points: 1 },
+};
+const PLAYERS = ['Caden', 'Gavin', 'Dee'];
+const ROLES = { Caden: 'CEO', Gavin: 'CRO', Dee: 'CBO' };
+const EMOJIS = { Caden: '👑', Gavin: '🔥', Dee: '💎' };
+
+async function supaFetch(path, options = {}) {
+  const res = await fetch(SUPABASE_URL + '/rest/v1/' + path, {
+    headers: {
+      'apikey': SUPABASE_KEY,
+      'Authorization': 'Bearer ' + SUPABASE_KEY,
+      'Content-Type': 'application/json',
+      'Prefer': options.prefer || 'return=representation',
+    },
+    ...options,
+  });
+  return res.json();
+}
+
+async function getDeals() {
+  return await supaFetch('deals?order=created_at.asc');
+}
+
+async function addDeal(deal) {
+  return await supaFetch('deals', { method: 'POST', body: JSON.stringify(deal) });
+}
+
+async function removeDeal(id) {
+  await fetch(SUPABASE_URL + '/rest/v1/deals?id=eq.' + id, {
+    method: 'DELETE',
+    headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY },
+  });
+}
+
+function updatePreview() {
+  const type = document.getElementById('deal-type').value;
+  document.getElementById('prev-revenue').textContent = '$' + PRICING[type].revenue.toLocaleString();
+  document.getElementById('prev-commission').textContent = '$' + PRICING[type].commission.toLocaleString();
+}
+
+function launchConfetti() {
+  const container = document.getElementById('confetti');
+  const colors = ['#D4A853','#3b82f6','#22c55e','#ef4444','#8b5cf6','#f59e0b','#ec4899'];
+  for (let i = 0; i < 80; i++) {
+    const p = document.createElement('div');
+    p.className = 'confetti-piece';
+    p.style.left = Math.random()*100+'%';
+    p.style.backgroundColor = colors[Math.floor(Math.random()*colors.length)];
+    p.style.width = (Math.random()*8+5)+'px';
+    p.style.height = (Math.random()*8+5)+'px';
+    p.style.animationDelay = Math.random()*0.8+'s';
+    p.style.animationDuration = (Math.random()*1.5+2)+'s';
+    container.appendChild(p);
+  }
+  setTimeout(() => { container.innerHTML = ''; }, 3500);
+}
+
+async function logDeal() {
+  const who = document.getElementById('who').value;
+  const type = document.getElementById('deal-type').value;
+  const client = document.getElementById('client-name-input').value.trim() || 'Unnamed';
+  const commission = who === 'Caden' ? PRICING[type].revenue : PRICING[type].commission;
+  await addDeal({ who, type, client, revenue: PRICING[type].revenue, commission, points: PRICING[type].points });
+  document.getElementById('client-name-input').value = '';
+  launchConfetti();
+  await render();
+}
+
+async function deleteDeal(id) {
+  if (confirm('Delete this deal?')) {
+    await removeDeal(id);
+    await render();
+  }
+}
+
+async function clearAll() {
+  if (confirm('Reset ALL deal data? Cannot be undone.')) {
+    const deals = await getDeals();
+    for (const d of deals) await removeDeal(d.id);
+    await render();
+  }
+}
+
+async function render() {
+  const deals = await getDeals();
+  const tally = {};
+  PLAYERS.forEach(p => tally[p] = { deals: 0, points: 0, revenue: 0, commission: 0 });
+  deals.forEach(d => {
+    if (!tally[d.who]) return;
+    tally[d.who].deals++;
+    tally[d.who].points += parseFloat(d.points || (d.type==='ai'?1:0.5));
+    tally[d.who].revenue += d.revenue;
+    tally[d.who].commission += d.commission;
+  });
+  const sorted = PLAYERS.map(p => ({name:p,...tally[p]})).sort((a,b) => b.points-a.points || b.revenue-a.revenue);
+  const maxPoints = Math.max(...sorted.map(p => p.points), 1);
+  const classes = ['first','second','third'];
+
+  // Leader
+  let leaderText;
+  if (sorted[0].points===0) { leaderText='No deals yet — game on.'; }
+  else {
+    const top = sorted[0].points;
+    const tied = sorted.filter(p => p.points===top);
+    if (tied.length===1) leaderText = tied[0].name+' gets the master bedroom.';
+    else if (tied.length===2) leaderText = tied[0].name+' & '+tied[1].name+' are tied. Next deal wins.';
+    else leaderText = tied.map(p=>p.name).join(', ')+' all tied. Next deal breaks it.';
+  }
+  document.getElementById('leader-name').textContent = leaderText;
+
+  // Streaks
+  const now = new Date();
+  const monthStart = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
+  const thisMonth = deals.filter(d => d.created_at > monthStart);
+  const streaksEl = document.getElementById('streaks');
+  streaksEl.innerHTML = '';
+  PLAYERS.forEach(p => {
+    const count = thisMonth.filter(d => d.who===p).length;
+    const fires = count>0 ? '🔥'.repeat(Math.min(count,10)) : '—';
+    streaksEl.innerHTML += `<div class="streak-card ${count>=3?'hot':''}">
+      <div class="streak-name">${p}</div><div class="streak-fires">${fires}</div>
+      <div class="streak-label">${count} deal${count!==1?'s':''} this month</div></div>`;
+  });
+
+  // Leaderboard
+  const lb = document.getElementById('leaderboard');
+  lb.innerHTML = '';
+  sorted.forEach((p,i) => {
+    const pct = (p.points/maxPoints)*100;
+    lb.innerHTML += `<div class="player ${classes[i]}">
+      ${i===0&&p.points>0?'<div class="crown">👑</div>':''}
+      <div class="rank">#${i+1}</div>
+      <div class="p-info"><div class="p-name">${EMOJIS[p.name]} ${p.name}</div>
+      <div class="p-role">${ROLES[p.name]} — ${p.deals} deal${p.deals!==1?'s':''}</div></div>
+      <div class="p-stats"><div class="p-deals">${p.points}</div><div class="p-deals-label">points</div>
+      <div class="p-commission">${p.name==='Caden'?'$'+p.revenue.toLocaleString()+' added revenue':'$'+p.commission.toLocaleString()+' earned'}</div></div>
+      <div class="p-bar"><div class="p-bar-fill" style="width:${pct}%"></div></div></div>`;
+  });
+
+  // Stats
+  const totalDeals = deals.length;
+  const totalRev = deals.reduce((s,d)=>s+d.revenue,0);
+  const totalComm = deals.reduce((s,d)=>s+d.commission,0);
+  const aiDeals = deals.filter(d=>d.type==='ai').length;
+  document.getElementById('ts-deals').textContent = totalDeals;
+  document.getElementById('ts-revenue').textContent = '$'+totalRev.toLocaleString();
+  document.getElementById('ts-mrr').textContent = '$'+(aiDeals*600).toLocaleString()+'/mo';
+  document.getElementById('ts-commission').textContent = '$'+totalComm.toLocaleString();
+
+  // History
+  const hist = document.getElementById('deal-history');
+  if (!deals.length) { hist.innerHTML = '<div class="no-deals">No deals yet. Close something!</div>'; }
+  else {
+    hist.innerHTML = '';
+    [...deals].reverse().slice(0,20).forEach(d => {
+      const date = new Date(d.created_at);
+      const ds = date.toLocaleDateString('en-US',{month:'short',day:'numeric'});
+      const ts = date.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
+      hist.innerHTML += `<div class="deal-entry">
+        <div class="de-left"><span class="de-who">${d.who}</span><span class="de-type">${d.type==='ai'?'AI Employee':'Website'} — ${d.client||'Unnamed'}</span></div>
+        <div class="de-right"><span class="de-revenue">$${d.revenue.toLocaleString()}</span>
+        <span class="de-commission">($${d.commission.toLocaleString()})</span>
+        <span class="de-date">${ds} ${ts}</span>
+        <button onclick="deleteDeal(${d.id})" class="btn-delete">✕</button></div></div>`;
+    });
+  }
+}
+
+// PWA
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js');
+
+// Auto-refresh every 30 seconds
+render();
+setInterval(render, 30000);
+</script>
+</body>
+</html>
