@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { width: 512px; height: 512px; display: flex; align-items: center; justify-content: center; }
+canvas { display: block; }
+</style>
+</head>
+<body>
+<canvas id="c" width="512" height="512"></canvas>
+<script>
+const c = document.getElementById('c');
+const ctx = c.getContext('2d');
+
+// Background
+ctx.fillStyle = '#0B1120';
+ctx.beginPath();
+ctx.roundRect(0, 0, 512, 512, 90);
+ctx.fill();
+
+// Subtle glow
+const glow = ctx.createRadialGradient(350, 100, 0, 350, 100, 250);
+glow.addColorStop(0, 'rgba(59,130,246,0.12)');
+glow.addColorStop(1, 'transparent');
+ctx.fillStyle = glow;
+ctx.fillRect(0, 0, 512, 512);
+
+// Bottom accent line
+const grad = ctx.createLinearGradient(0, 0, 512, 0);
+grad.addColorStop(0, '#D4A853');
+grad.addColorStop(1, '#3b82f6');
+ctx.fillStyle = grad;
+ctx.beginPath();
+ctx.roundRect(0, 506, 512, 6, [0, 0, 90, 90]);
+ctx.fill();
+
+// Trophy shape (simplified)
+ctx.fillStyle = '#D4A853';
+// Cup body
+ctx.beginPath();
+ctx.moveTo(156, 140);
+ctx.lineTo(156, 260);
+ctx.quadraticCurveTo(156, 320, 256, 340);
+ctx.quadraticCurveTo(356, 320, 356, 260);
+ctx.lineTo(356, 140);
+ctx.closePath();
+ctx.fill();
+
+// Cup rim
+ctx.fillStyle = '#e8c96a';
+ctx.fillRect(140, 130, 232, 24);
+
+// Left handle
+ctx.strokeStyle = '#D4A853';
+ctx.lineWidth = 16;
+ctx.beginPath();
+ctx.arc(148, 210, 40, -Math.PI/2, Math.PI/2);
+ctx.stroke();
+
+// Right handle
+ctx.beginPath();
+ctx.arc(364, 210, 40, Math.PI/2, -Math.PI/2);
+ctx.stroke();
+
+// Stem
+ctx.fillStyle = '#D4A853';
+ctx.fillRect(236, 340, 40, 50);
+
+// Base
+ctx.beginPath();
+ctx.roundRect(186, 385, 140, 24, 6);
+ctx.fill();
+
+// Star on trophy
+ctx.fillStyle = '#0B1120';
+ctx.font = 'bold 72px Inter, sans-serif';
+ctx.textAlign = 'center';
+ctx.textBaseline = 'middle';
+ctx.fillText('★', 256, 240);
+
+// Text
+ctx.fillStyle = '#ffffff';
+ctx.font = '900 42px Inter, sans-serif';
+ctx.fillText('DEAL', 256, 445);
+ctx.fillStyle = '#D4A853';
+ctx.fillText('RACE', 256, 488);
+
+// Download link
+const link = document.createElement('a');
+link.download = 'icon-512.png';
+link.href = c.toDataURL('image/png');
+document.title = 'done';
+</script>
+</body>
+</html>
